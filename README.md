@@ -17,6 +17,10 @@ Add objectify-appengine-memcacheclient to your application dependencies.
 build.gradle snippet
 
 ```
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io/' }
+}
 dependencies {
     compile group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.1'
     runtime group: 'com.github.takemikami', name: 'objectify-appengine-memcacheclient', version: '0.0.1'
