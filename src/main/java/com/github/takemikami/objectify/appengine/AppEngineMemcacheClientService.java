@@ -5,9 +5,9 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.cache.IdentifiableValue;
 import com.googlecode.objectify.cache.MemcacheService;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AppEngineMemcacheClientService implements MemcacheService {
 
@@ -24,13 +24,15 @@ public class AppEngineMemcacheClientService implements MemcacheService {
 
   @Override
   public Map<String, IdentifiableValue> getIdentifiables(Collection<String> keys) {
-    Map<String, IdentifiableValue> rtn = new HashMap<>();
-    this.appengineMemcache.getIdentifiables(keys).forEach((k, v) -> {
-          final IdentifiableValue iv = new AppEngineIdentifiableValue(new CasValues(v, null));
-          rtn.put(k, iv);
-        }
-    );
-    return rtn;
+    Map<String, com.google.appengine.api.memcache.MemcacheService.IdentifiableValue> ivs
+        = this.appengineMemcache.getIdentifiables(keys);
+    return keys.stream().collect(Collectors.toMap((k -> k), (k ->
+        new AppEngineIdentifiableValue(new CasValues(
+            ivs.computeIfAbsent(k, iv -> {
+              this.appengineMemcache.put(iv, null);
+              return this.appengineMemcache.getIdentifiable(iv);
+            }), null))
+    )));
   }
 
   @Override
@@ -50,14 +52,14 @@ public class AppEngineMemcacheClientService implements MemcacheService {
 
   @Override
   public Set<String> putIfUntouched(Map<String, CasPut> values) {
-    Map<String, CasValues> param = new HashMap<>();
-    values.forEach((k, v) -> {
-      param.put(k,
-          new CasValues(((AppEngineIdentifiableValue) v.getIv()).getCasValues().getOldValue(),
-              v.getNextToStore())
-      );
-    });
-    return this.appengineMemcache.putIfUntouched(param);
+    return this.appengineMemcache.putIfUntouched(
+        values.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e ->
+            new CasValues(
+                ((AppEngineIdentifiableValue) e.getValue().getIv()).getCasValues()
+                    .getOldValue(),
+                e.getValue().getNextToStore())
+        ))
+    );
   }
 
   @Override
