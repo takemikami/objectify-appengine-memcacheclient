@@ -45,7 +45,7 @@ public class AppEngineMemcacheClientServiceTest {
       put("name3", "value3");
     }});
 
-    Map<String,Object> rtn = svc.getAll(Arrays.asList(new String[]{"name1", "name2"}));
+    Map<String, Object> rtn = svc.getAll(Arrays.asList("name1", "name2"));
 
     assertEquals("value1", rtn.get("name1"));
     assertEquals("value2", rtn.get("name2"));
@@ -60,13 +60,23 @@ public class AppEngineMemcacheClientServiceTest {
       put("name2", "value2");
       put("name3", "value3");
     }});
-    svc.deleteAll(Arrays.asList(new String[]{"name1", "name2"}));
+    svc.deleteAll(Arrays.asList("name1", "name2"));
 
-    Map<String,Object> rtn = svc.getAll(Arrays.asList(new String[]{"name1", "name2", "name3"}));
+    Map<String, Object> rtn = svc.getAll(Arrays.asList("name1", "name2", "name3"));
 
     assertNull(rtn.get("name1"));
     assertNull(rtn.get("name2"));
     assertEquals("value3", rtn.get("name3"));
+  }
+
+  @Test
+  public void testGetEmptyIdentifiables() {
+    AppEngineMemcacheClientService svc = new AppEngineMemcacheClientService();
+    Map<String, IdentifiableValue> rtn = svc
+        .getIdentifiables(Arrays.asList("name1", "name2"));
+
+    assertNull(rtn.get("name1").getValue());
+    assertNull(rtn.get("name2").getValue());
   }
 
   @Test
@@ -78,7 +88,8 @@ public class AppEngineMemcacheClientServiceTest {
       put("name3", "value3");
     }});
 
-    Map<String, IdentifiableValue> rtn = svc.getIdentifiables(Arrays.asList(new String[]{"name1", "name2"}));
+    Map<String, IdentifiableValue> rtn = svc
+        .getIdentifiables(Arrays.asList("name1", "name2"));
 
     assertEquals("value1", rtn.get("name1").getValue());
     assertEquals("value2", rtn.get("name2").getValue());
@@ -93,7 +104,8 @@ public class AppEngineMemcacheClientServiceTest {
       put("name3", "value3");
     }});
 
-    Map<String, IdentifiableValue> rtn1 = svc.getIdentifiables(Arrays.asList(new String[]{"name1", "name2"}));
+    Map<String, IdentifiableValue> rtn1 = svc
+        .getIdentifiables(Arrays.asList("name1", "name2"));
 
     assertEquals("value1", rtn1.get("name1").getValue());
     assertEquals("value2", rtn1.get("name2").getValue());
@@ -103,9 +115,10 @@ public class AppEngineMemcacheClientServiceTest {
       put("name2", new CasPut(rtn1.get("name2"), "value21", 0));
     }});
 
-    Map<String,Object> rtn2 = svc.getAll(Arrays.asList(new String[]{"name1", "name2"}));
+    Map<String, Object> rtn2 = svc.getAll(Arrays.asList("name1", "name2"));
 
     assertEquals("value11", rtn2.get("name1"));
+
     assertEquals("value21", rtn2.get("name2"));
   }
 
