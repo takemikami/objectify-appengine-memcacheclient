@@ -2,6 +2,7 @@ package sample;
 
 import com.googlecode.objectify.ObjectifyService;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ public class SampleController {
         + "<li><a href='/put'>put entity</a>"
         + "<li><a href='/get'>get entity</a>"
         + "<li><a href='/del'>del entity</a>"
+        + "<li><a href='/stat'>memcache stat</a>"
         + "</ul>";
   }
 
@@ -47,6 +49,17 @@ public class SampleController {
     }
 
     return "no date.<br/><a href='/'>top</a>";
+  }
+
+  @RequestMapping("/stat")
+  public String stat() {
+    return ObjectifyService.factory().getMemcacheStats().getStats().entrySet().stream().map(e ->
+        e.getKey()
+            + ": hits=" + e.getValue().getHits()
+            + ", miss=" + e.getValue().getMisses()
+            + ", percent: " + e.getValue().getPercent()
+    ).collect(Collectors.joining("<br/>"))
+        + "<br/><a href='/'>top</a>";
   }
 
 }
