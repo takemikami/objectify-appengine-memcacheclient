@@ -22,9 +22,9 @@ repositories {
     maven { url 'https://jitpack.io/' }
 }
 dependencies {
-    compile group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.1'
-    runtime group: 'com.github.takemikami', name: 'objectify-appengine-memcacheclient', version: '0.0.1'
-    runtime group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.64'
+    compile group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.2'
+    runtime group: 'com.github.takemikami', name: 'objectify-appengine-memcacheclient', version: '0.0.2'
+    runtime group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.65'
 }
 ```
 

@@ -10,14 +10,14 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    compileOnly group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.1'
-    compileOnly group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.64'
+    compileOnly group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.2'
+    compileOnly group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.65'
 
     testCompile 'junit:junit:4.+'
-    testCompile 'com.google.appengine:appengine-api-stubs:1.9.64'
-    testCompile 'com.google.appengine:appengine-testing:1.9.64'
-    testCompile group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.1'
-    testCompile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.64'
+    testCompile 'com.google.appengine:appengine-api-stubs:1.9.65'
+    testCompile 'com.google.appengine:appengine-testing:1.9.65'
+    testCompile group: 'com.googlecode.objectify', name: 'objectify', version: '6.0.2'
+    testCompile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: '1.9.65'
 }
 
 jacocoTestReport {
